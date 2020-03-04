@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+
+  web:
+    image: onlyoffice/documentserver 
+    container_name: onlyoffice-documentserver
+    restart: always
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=<secret_key>
+      - VIRTUAL_HOST=onlyoffice.<mydomain.com>
+      - LETSENCRYPT_HOST=onlyoffice.<mydomain.com>
+      - LETSENCRYPT_EMAIL=<email>
+    volumes:
+      - data:/var/www/onlyoffice/Data
+      - log:/var/log/onlyoffice
+      - cache:/var/lib/onlyoffice
+      - db:/var/lib/postgresql
+    networks:
+      - reverse-proxy
+
+volumes:
+  data:
+    name: onlyoffice_data
+  log:
+    name: onlyoffice_log
+  cache:
+    name: onlyoffice_cache
+  db:
+    name: onlyoffice_db
+
+networks:
+  reverse-proxy:
+    external:
+      name: https-reverse-proxy
+ 

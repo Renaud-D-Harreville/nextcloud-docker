@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+
+  webdav:
+    image: bytemark/webdav
+    container_name: webdav-server
+    restart: always
+    environment:
+      AUTH_TYPE: Basic
+      SERVER_NAMES: webdav.<mydomain.com> 
+      USERNAME: <user>
+      PASSWORD: <password>
+      VIRTUAL_HOST: webdav.<mydomain.com>
+      LETSENCRYPT_HOST: webdav.<mydomain.com>
+      LETSENCRYPT_EMAIL: <email>
+    volumes:
+      - data:/var/lib/dav
+    networks:
+      - reverse-proxy
+
+volumes:
+  data:
+    name: webdav_data
+
+networks:
+  reverse-proxy:
+    external:
+      name: https-reverse-proxy
+ 

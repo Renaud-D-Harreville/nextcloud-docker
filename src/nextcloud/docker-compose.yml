@@ -1,0 +1,67 @@
+version: '3.5'
+
+services:
+  db:
+    image: mariadb
+    container_name: nextcloud-mariadb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    env_file:
+      - db.env
+
+  clamav:
+    image: mk0x/docker-clamav 
+    container_name: nextcloud-clamav
+    restart: always
+
+  app:
+    build: ./app
+    container_name: nextcloud-app
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+      - data:/var/www/html/data
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - MYSQL_HOST=db
+      - NEXTCLOUD_ADMIN_USER=<admin_username>
+      - NEXTCLOUD_ADMIN_PASSWORD=<admin_password>
+      - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.<mydomain.com>
+    env_file:
+      - db.env
+    depends_on:
+      - db
+      - clamav
+
+  web:
+    build: ./web
+    container_name: nextcloud-web
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - VIRTUAL_HOST=nextcloud.<mydomain.com>
+      - LETSENCRYPT_HOST=nextcloud.<mydomain.com>
+      - LETSENCRYPT_EMAIL=<email>
+    depends_on:
+      - app
+    networks:
+      - reverse-proxy
+      - default
+
+volumes:
+  db:
+    name: nextcloud_db
+  nextcloud:
+    name: nextcloud_app
+  data:
+    name: nextcloud_data
+
+networks:
+  reverse-proxy:
+    external:
+      name: https-reverse-proxy
+ 
