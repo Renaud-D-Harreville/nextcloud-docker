@@ -64,7 +64,8 @@ You can find more informations about [how to configure letsencrpyt here](https:/
 In conclusion, you have no configuration to do here, but the next directories must set environment variable to correctly map with those two containers.
 
 to lauch the two containers, go to src/https-reverse-proxy and :
-docker-compose up --build -d
+
+    docker-compose up --build -d
 
 Wait a bit for the images download and container creations.
 
@@ -86,6 +87,7 @@ This is all !
 ### Configure Nextcloud
 
 First, configure the three environment variable in dhe src/nextcloud/docker-compose.yml file : 
+      
       - NEXTCLOUD_ADMIN_USER=<admin_username>
       - NEXTCLOUD_ADMIN_PASSWORD=<admin_password>
       - NEXTCLOUD_TRUSTED_DOMAINS=nextcloud.<mydomain.com>
@@ -113,7 +115,8 @@ Annd, that's it !! :)
 
 You now have configure your nextcloud server and can launch it with the same command : 
 go to the src/nextcloud directory and launch :
-docker-compose up --build -d
+
+    docker-compose up --build -d
 
 You will have to wait a bit (maybe minutes) to get your nextcloud avaible, because Let's Encrypt can make some time to deliver you a certificate. (But, sincerely, the is still way more too easy to cry ! ;) ).
 
@@ -135,7 +138,7 @@ That's it !! :)
 
 launch your onlyoffice container now ! 
 
-docker-compose up --build -d
+    docker-compose up --build -d
 
 
 
