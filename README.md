@@ -181,3 +181,38 @@ Et Voila ! :)
 
 You can now check if your onlyoffice document server is avaible at *onlyoffice.mydomain.com* 
 Now, go to your nextcloud web application by going to *nextcloud.mydomain.com* adress, type your login and password you described in the 'Configure Nextcloud' part, and add the onlyoffice integretion app. Configure it on the settings part, and you're done ! :)
+
+
+# Add a WebDav server
+
+Because maybe for some reasons you want to add additional disk on an external server, one (good) solution is to create a WebDav server in this external server. For example maybe you would like to add a raspberry pi host on your house with some external (eavy) storage connected to it be accessible directly in your nextcloud application. 
+
+So, you will have to create a WebDav server on your remote (your raspberry pi in our example) server. For this, we will still want the first three constraints we forced ourselves to get : docker management, https security and extendability.
+
+Very simple ! :) Now that we have lay the foundation, you can directly re launch the *https-reverse-proxy/docker-compose.yml* file, but now on your remote server : 
+
+    cd src/https-reverse-proxy/
+    docker-compose up --build -d
+    
+This way, we are ready to proxy requests to our futures applications. You will still be able to accept many web applications on your other server ! :) 
+
+Now, go to the *webdav* directory and edit the *docker-compose.yml* file : 
+
+      SERVER_NAMES: webdav.<mydomain.com>
+      USERNAME: <random_username>
+      PASSWORD: <random_strong_password>
+      VIRTUAL_HOST: webdav.<mydomain.com>
+      LETSENCRYPT_HOST: webdav.<mydomain.com>
+      LETSENCRYPT_EMAIL: <email>
+  
+You will recognize the three last variable used for the previous containers launched (nginx-proxy and letsencrypt companion).
+
+**Still, make sure your *webdav.mydomain.com> address is correctly configured on your DNS : it will redirect to your remote server IP !**
+
+Launch your WebDav server : 
+
+    docker-compose up --build -d
+    
+Check if your server is correclty avaible by going to *webdav.mydomain.com* adress on a web browser. You will be prompted for a user login and password. type them, and check if you can access to your files (certainly empty by the way, but if you don't have any errors, this is certainly all good !)
+
+
