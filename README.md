@@ -3,7 +3,7 @@ Nextcloud + OnlyOffice installation with docker and docker compose
 
 > Note : This documentation assume you already have installed docker and docker-compose on your server, and that you have basic knowledges with those tools. 
 
-> It also suppose that you have a valid domain adress, pointing to your (future) web-server. However, you will need this to get automatics SSL certificates delivered by the Let's Encrypt certificate authority
+> It also suppose that you have a valid domain adress, pointing to your (future) web-server. However, you will need this to get automatics SSL certificates delivered by the Let's Encrypt certificate authority.
 
 ## What this repository will get to you : 
 - A secure Nextcloud server with https provided by [Let's Encrypt](https://letsencrypt.org/)
@@ -92,7 +92,11 @@ So, let's start with the MariaDB image :
 
 ### Configure MariaDB
 
-Just add a strong password in the *src/nextcloud/db.env* file
+Just add strong passwords in the *src/nextcloud/db.env* file for :
+
+    MYSQL_ROOT_PASSWORD=<root_password>
+    MYSQL_PASSWORD=<nextcloud_user_password>
+
 This is all !
 
 ### Configure Nextcloud
@@ -124,18 +128,31 @@ So, just fill these three variable with your domain adress and your email !
 
 Annd, that's it !! :)
 
+### launch nextcloud application
 
-You now have configure your nextcloud server and can launch it with the same command : 
+You now have configured your nextcloud server and can launch it with the same command : 
 go to the *src/nextcloud* directory and launch :
 
     cd src/nextcloud/
     docker-compose up --build -d
 
-You will have to wait a bit (maybe minutes) to get your nextcloud avaible, because Let's Encrypt can make some time to deliver you a certificate. (But, sincerely, the is still way more too easy ! :) ).
+You will have to wait a bit (maybe minutes) to get your nextcloud avaible, because containers have to wait for each other (app must wait database for example) to be up ! You can check the logs (docker logs <container_name>) to view if everything is OK !
 
 *You can now go to your web site using nextcloud.mydomain.com adress, and see the nextcloud login page. Congratulation, you now have a nextcloud application :).*
 
 > Note : If you cannot view your site, maybe you have to wait a bit more or you have to check your DNS configuration (that i won't explain here !), make sure you can access to nextcloud.mydomain.com adress by just typing it in your browser adress bar ! (An nginx message must appear !). 
+
+### Configure a bit more your nextcloud
+
+Maybe you will notice that if you go in the settings -> overview page, their is some trouble : 
+So, we will fix here the two of them about databases indexes and big-int format.
+For this, connect yourself to your docker container and execute the two commands : 
+
+    docker exec -it --user www-data nextcloud-app sh
+    php occ db:add-missing-indices
+    php occ db:convert-filecache-bigint
+
+This will supress the corresponding messages (and improve performances on your server..)
 
 # Now, onlyoffice !
 
@@ -163,4 +180,4 @@ launch your onlyoffice container now !
 Et Voila ! :) 
 
 You can now check if your onlyoffice document server is avaible at *onlyoffice.mydomain.com* 
-Now, go to your nextcloud web application by going to *nextcloud.mydomain.com* adress, type your login and password you describe in the 'Configure Nextcloud' part, and add the onlyoffice integretion app. Configure it on the settings part, and you're done ! :)
+Now, go to your nextcloud web application by going to *nextcloud.mydomain.com* adress, type your login and password you described in the 'Configure Nextcloud' part, and add the onlyoffice integretion app. Configure it on the settings part, and you're done ! :)
