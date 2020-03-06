@@ -16,6 +16,10 @@ So, here is the configuration you want :)
 
 ![clamav configuration picture](/resources/clamav-configuration.PNG)
 
+**Don't forget to save before testing it !**
+
+You can now upload a file in your Nextcloud application, if you go to the logs, you **won't see error** about clamav ! (If you configure it uncorrectly you will see an error each time you upload a file)
+
 # Volume management
 
 As i explained on the main tutorial, i initially would like to manage my application with docker, and by that, i mean completely manage with docker ! 
