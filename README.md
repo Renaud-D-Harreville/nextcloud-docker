@@ -1,7 +1,9 @@
 # nextcloud-docker
 Nextcloud + OnlyOffice installation with docker and docker compose
 
-> Note : This documentation assume you already have installed docker and docker-compose on your server, and that you have basic knowledges with those tools. 
+Github link : [https://github.com/Renaud-D-Harreville/nextcloud-docker](https://github.com/Renaud-D-Harreville/nextcloud-docker) 
+
+> Note : This documentation assumes you already have installed docker and docker-compose on your server, and that you have basic knowledges with those tools. 
 
 > It also suppose that you have a valid domain adress, pointing to your (future) web-server. However, you will need this to get automatics SSL certificates delivered by the Let's Encrypt certificate authority.
 
