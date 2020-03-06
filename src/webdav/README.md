@@ -25,4 +25,4 @@ Start by enabling the 'external storage support' app in the app management page.
 
 You can add as many folders as you want in here, for differents groups if you want to !
 
-![webdav-configuration picture](resources/webdav-configuration.PNG)
+![webdav-configuration picture](/resources/webdav-configuration.PNG)
