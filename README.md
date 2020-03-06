@@ -209,7 +209,7 @@ Now, go to the *webdav* directory and edit the *docker-compose.yml* file :
   
 You will recognize the three last variable used for the previous containers launched (nginx-proxy and letsencrypt companion).
 
-**Still, make sure your *webdav.mydomain.com> address is correctly configured on your DNS : it will redirect to your remote server IP !**
+**Still, make sure your *webdav.mydomain.com* address is correctly configured on your DNS : it has to redirect to your remote server IP !**
 
 Launch your WebDav server : 
 
