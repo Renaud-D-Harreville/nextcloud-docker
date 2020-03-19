@@ -223,4 +223,8 @@ Launch your WebDav server :
 Check if your server is correclty avaible by going to *webdav.mydomain.com* adress on a web browser. You will be prompted for a user login and password. type them, and check if you can access to your files (certainly empty by the way, but if you don't have any errors, this is certainly all good !)
 
 
+That's it :) 
+
+.
+
 > **Note that you will find a bit more informations within the src/\*/ directories. For example on how to configure ClamAv, or onlyOffice applications sides parts !** 
