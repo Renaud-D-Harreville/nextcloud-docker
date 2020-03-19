@@ -27,3 +27,8 @@ So just add this at the end of your docker service part (as seen on the example 
 
 And to finish, we must explain that our network is an external one, and explicitly name it. This is done within the network part of the docker-compose file specification : 
 
+    networks:
+      reverse-proxy:
+        external:
+          name: https-reverse-proxy
+
