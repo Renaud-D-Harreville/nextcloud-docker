@@ -18,6 +18,12 @@ Note that you can obviously change the 'nginx' with the name you want to for you
 ## Docker Network part 
 
 Because we have to communicate with the reverse proxy launched previously (on the main README.md part), we have to connect our docker container to the same reverse-proxy container through a docker network.
-So just add this at the end of your docker
+So just add this at the end of your docker service part (as seen on the example !) :
+
     networks:
       - reverse-proxy
+
+## Network definition
+
+And to finish, we must explain that our network is an external one, and explicitly name it. This is done within the network part of the docker-compose file specification : 
+
