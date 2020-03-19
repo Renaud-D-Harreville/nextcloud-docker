@@ -3,9 +3,6 @@ Nextcloud + OnlyOffice installation with docker and docker compose
 
 Github link : [https://github.com/Renaud-D-Harreville/nextcloud-docker](https://github.com/Renaud-D-Harreville/nextcloud-docker) 
 
-> Note : This documentation assumes you already have installed docker and docker-compose on your server, and that you have basic knowledges with those tools. 
-
-> It also suppose that you have a valid domain adress, pointing to your (future) web-server. However, you will need this to get automatics SSL certificates delivered by the Let's Encrypt certificate authority.
 
 ## What this repository will get to you : 
 - A secure Nextcloud server with https provided by [Let's Encrypt](https://letsencrypt.org/)
@@ -14,14 +11,18 @@ Github link : [https://github.com/Renaud-D-Harreville/nextcloud-docker](https://
 - A [WebDav](https://fr.wikipedia.org/wiki/WebDAV) example for additional disk
 - A simple additional virtual web site (nginx welcome page) to get a minimal example on how to extand your web server.
 
+> Note : This documentation assumes you already have installed docker and docker-compose on your server, and that you have basic knowledges with those tools. 
+
+> It also suppose that you have a valid domain adress, pointing to your (future) web-server. However, you will need this to get automatics SSL certificates delivered by the Let's Encrypt certificate authority.
+
 **This repository is intended to share one possibility to host a complete and secure nextcloud server.**
 
 At first i wanted to get a secure and stable nextcloud self-hosted server, and i forced myself with those constraints :
 
 * Stability and easily management that can be offered by docker containers
 * Security of both data and server, mainly served with https protocol (no clear password on the internet).
-* Extendable domain sites : Because i didn't want to get my domain to be exclusive for nextcloud, i wanted to add other web sites using my domain.
-* OnlyOffice integration. We will see that with the first three points, this constraint is easy to get ! (And that was exactly what i wanted to with those 3 first points : easy management, but not to ommit security, and easy extendability !)
+* Extendable domain sites : Because i didn't want to get my domain to be exclusive for nextcloud, i wanted to add other web sites using my personal domain.
+* OnlyOffice integration. We will see that with the first three points, this constraint is easy to get ! (And that was exactly what i wanted to with the 3 first points : easy management, but not to ommit security, and easy extendability !)
 
 # Global overview
 
@@ -33,11 +34,13 @@ At first i wanted to get a secure and stable nextcloud self-hosted server, and i
 
 First, we want the use of docker because it is more stable, especially when multiple applications are launched on the same server, and it can be very easily managed with docker compose. So we start by searching the rights docker images and if possible some examples of their possible docker compose configuration. [And here we get it !](https://hub.docker.com/_/nextcloud/)
 
-So, this is how we get a nextcloud + mariadb + nginx configuration, that will enable us to get an unsecure but working docker compose nextcloud server. that can be access through the server IP adress. This is approximatively what we can found on the *src/nextcloud directory* (you will see an additional clamav image in it, that i will explain later).
+> Note that the docker-compose examples in the link are in version 2, but you will find updated docker-compose files in version 3 in this repository, based on [the nextcloud docker github project](https://github.com/nextcloud/docker/tree/master/.examples)
+
+So, this is how we get a nextcloud + mariadb + nginx configuration, that will enable us to get an unsecure but working docker compose nextcloud server, that can be access through the server IP adress. This is approximatively what we can found on the *src/nextcloud directory* (you will see an additional clamav image in it, that i will explain later).
 
 #### 2) Add https protocol for security purpose
 
-But, for security purpose, we want https protocol, and this can be achieved with the letsencrypt docker image. But to make it work we must get a valid domain (you will probably have to buy one), and a correct DNS configuration to map your domain adress to your server IP. More information about this on the Letsencrypt site web. This is achieved by combining the *src/https-reverse-proxy* and *src/nextcloud* directories. Originally, they were merged into one single directory and one single docker-compose file. But, as we will see, this resulted into the impossibility to add another web site in the same server because port 80 and 443 are already use by the nginx-proxy container !
+But, for security purpose, we want https protocol, and this can be achieved with the letsencrypt docker image. But to make it work we must get a valid domain (you will probably have to buy one), and a correct DNS configuration to map your domain adress to your server IP. More information about this on the [Letsencrypt site web](https://letsencrypt.org/). This is achieved by combining the *src/https-reverse-proxy* and *src/nextcloud* directories. Originally, they were merged into one single directory and one single docker-compose file. But, as we will see, this resulted into the impossibility to add another web site in the same server because port 80 and 443 are already used by the nginx-proxy container !
 
 So, here is what we get after these step :
 
@@ -119,26 +122,26 @@ You can find a mail configuration example in the directory, and also how to add 
 
 ### Configure nginx server
 
-The Nginx server will serve nextcloud pages to usn this is here where we have to explicitly explain wich domain adress we want to use for the nextcloud application !
+The Nginx server will serve nextcloud pages. This is here where we have to explicitly explain wich domain adress we want to use for the nextcloud application !
 So, just fill these three variable with your domain adress and your email !
 
       - VIRTUAL_HOST=nextcloud.<mydomain.com>
       - LETSENCRYPT_HOST=nextcloud.<mydomain.com>
       - LETSENCRYPT_EMAIL=<email>
 
-**IMPORTANT : Be sure you have correctly configure your DNS so that the 'nextcloud.<mydomain.com>' adress point to your server IP adress ! Let's Encrypt won't be able to deliver you a valid certificate if this is not the case...**
+**IMPORTANT : Be sure you have correctly configure your DNS so that the 'nextcloud.<mydomain.com>' adress point out to your server IP adress ! Let's Encrypt won't be able to deliver you a valid certificate if this is not the case...**
 
 Annd, that's it !! :)
 
 ### launch nextcloud application
 
 You now have configured your nextcloud server and can launch it with the same command : 
-go to the *src/nextcloud* directory and launch :
+go to the *src/nextcloud* directory and launch it through :
 
     cd src/nextcloud/
     docker-compose up --build -d
 
-You will have to wait a bit (maybe minutes) to get your nextcloud avaible, because containers have to wait for each other (app must wait database for example) to be up ! You can check the logs (docker logs <container_name>) to view if everything is OK !
+You will have to wait a bit (maybe minutes) to get your nextcloud avaible, because containers have to wait for each other (nextcloud app must wait MariaDB database for example) to be up ! You can check the logs (docker logs <container_name>) to view if everything is OK !
 
 *You can now go to your web site using nextcloud.mydomain.com adress, and see the nextcloud login page. Congratulation, you now have a nextcloud application :).*
 
@@ -147,12 +150,14 @@ You will have to wait a bit (maybe minutes) to get your nextcloud avaible, becau
 ### Configure a bit more your nextcloud
 
 Maybe you will notice that if you go in the settings -> overview page, their is some trouble : 
-So, we will fix here the two of them about databases indexes and big-int format.
+So, we will fix here two of them about databases indexes and big-int format.
 For this, connect yourself to your docker container and execute the two commands : 
 
     docker exec -it --user www-data nextcloud-app sh
     php occ db:add-missing-indices
     php occ db:convert-filecache-bigint
+
+First line is to connect yourself with the user used by the nextcloud container app. Second line will add missing indices, and final line will supress the warning about bigint file cache problems.
 
 This will supress the corresponding messages (and improve performances on your server..)
 
@@ -196,7 +201,7 @@ Very simple ! :) Now that we have lay the foundation, you can directly re launch
     cd src/https-reverse-proxy/
     docker-compose up --build -d
     
-This way, we are ready to proxy requests to our futures applications. You will still be able to accept many web applications on your other server ! :) 
+This way, we are ready to proxy requests of our futures applications. You will still be able to accept many web applications on your other server ! :) 
 
 Now, go to the *webdav* directory and edit the *docker-compose.yml* file : 
 
