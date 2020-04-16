@@ -228,3 +228,13 @@ That's it :)
 .
 
 > **Note that you will find a bit more informations within the src/\*/ directories. For example on how to configure ClamAv, or onlyOffice applications sides parts !** 
+
+
+## Updating the server
+
+To update the server, you just need these two commands : 
+
+    docker-compose build --pull
+    docker-compose up -d
+    
+
