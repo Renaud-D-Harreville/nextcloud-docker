@@ -26,7 +26,7 @@ At first i wanted to get a secure and stable nextcloud self-hosted server, and i
 
 # Global overview
 
-### How do this work ? How do we get all those constraints ? 
+### How does this work ? How do we get all those constraints ? 
 
 > Note : This is a general description of the project, I will explain in details each individual step further down the page. 
 
